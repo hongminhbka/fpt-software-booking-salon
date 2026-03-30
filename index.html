@@ -194,7 +194,7 @@
 </div>
 </body>
 <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5kuaGGVgR-sxFc4bbVgwUFjE5kgzGMw5PBz3XkynlehsIs_fx6Y0luDOmh8CmCH2xvQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwxV7G_XIFEkLs4qZAxwrQMjTVvjBBhCfIztE2gW3vn7a9NETOQZK5qKKvnlliVLKCc/exec";
 let currentSelectedDate = "";
 let selectedTimeSlot = ""; // Lưu khung giờ như "08:30"
 
@@ -308,55 +308,53 @@ async function fetchAndRenderSlots(day = "Hôm nay") {
     }
 }
 async function handleBooking(event) {
-    event.preventDefault(); // Chặn việc load lại trang
-
+    event.preventDefault();
     const phoneInput = document.querySelector('input[type="tel"]');
     const phone = phoneInput.value.trim();
-
-    // 1. Kiểm tra Số điện thoại (Bắt buộc)
-    if (!phone) {
-        alert("Vui lòng nhập số điện thoại để nhà trường liên lạc!");
-        phoneInput.focus();
-        return;
-    }
-
-    // 2. Kiểm tra Khung giờ (Không bắt buộc nhưng có cảnh báo)
-    if (!selectedTimeSlot) {
-        const confirmEmpty = confirm("Bạn chưa chọn khung giờ gội đầu. Bạn vẫn muốn tiếp tục đặt lịch chứ?");
-        if (!confirmEmpty) return;
-    }
-
-    // 3. Tiến hành gửi dữ liệu
     const submitBtn = event.target.querySelector('button[type="submit"]');
+
+    if (!phone) { alert("Vui lòng nhập số điện thoại!"); return; }
+    if (!selectedTimeSlot) {
+        if (!confirm("Bạn chưa chọn khung giờ. Tiếp tục?")) return;
+    }
+
     submitBtn.disabled = true;
     submitBtn.innerText = "Đang xử lý...";
 
-    const payload = {
-        date: currentSelectedDate,
-        slot: selectedTimeSlot || "Chưa chọn",
-        phone: phone
-    };
-
     try {
+        // Chúng ta gửi qua proxy hoặc chấp nhận no-cors, 
+        // nhưng để chắc chắn số ghế giảm, ta sẽ load lại data sau khi gửi
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors', // Dùng no-cors cho Google Apps Script
-            cache: 'no-cache',
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                date: currentSelectedDate,
+                slot: selectedTimeSlot || "Chưa chọn",
+                phone: phone
+            })
         });
 
-        // Với no-cors, ta không đọc được response trả về, 
-        // nhưng nếu không nhảy vào catch là đã gửi thành công
-        alert("Hệ thống ghi nhận lịch hẹn, bạn vui lòng sắp xếp thời gian xuống salon vào trước khung giờ khoảng 5 phút. Xin cảm ơn!");
-        
-        // Reset form
-        phoneInput.value = "";
-        selectedTimeSlot = "";
-        fetchAndRenderSlots(currentSelectedDate); // Load lại số chỗ trống
+        const result = await response.json();
 
+        if (result.result === "exists") {
+            alert("Số điện thoại này đã đặt chỗ cho khung giờ này rồi!");
+        } else if (result.result === "success") {
+            alert("Hệ thống ghi nhận lịch hẹn, bạn vui lòng sắp xếp thời gian xuống salon vào trước khung giờ khoảng 5 phút. Xin cảm ơn!");
+            
+            // RESET FORM
+            phoneInput.value = "";
+            selectedTimeSlot = "";
+            
+            // QUAN TRỌNG: Gọi lại hàm này để cập nhật số ghế trống ngay lập tức
+            await fetchAndRenderSlots(currentSelectedDate); 
+        } else {
+            alert("Lỗi: " + result.message);
+        }
     } catch (error) {
-        alert("Có lỗi xảy ra, vui lòng thử lại sau!");
-        console.error(error);
+        // Đôi khi do CORS, trình duyệt báo lỗi nhưng dữ liệu VẪN VÀO SHEET
+        // Ta vẫn nên load lại data để kiểm tra
+        console.log("Checking update...");
+        setTimeout(() => fetchAndRenderSlots(currentSelectedDate), 1500);
+        alert("Yêu cầu đã được gửi! Vui lòng kiểm tra lại trạng thái các ô giờ.");
     } finally {
         submitBtn.disabled = false;
         submitBtn.innerText = "Đặt lịch";
