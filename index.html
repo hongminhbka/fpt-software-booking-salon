@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Đặt Lịch Gội Đầu Văn Phòng</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-tertiary-fixed-variant": "#653e00",
+                "surface-container-lowest": "#ffffff",
+                "inverse-on-surface": "#eff1f0",
+                "tertiary-fixed": "#ffddb8",
+                "on-primary-fixed": "#001a41",
+                "primary-fixed-dim": "#adc7ff",
+                "surface-container-highest": "#e1e3e2",
+                "surface-dim": "#d8dada",
+                "primary": "#005bc0",
+                "on-primary": "#ffffff",
+                "surface-tint": "#005bc0",
+                "on-secondary-fixed": "#00201a",
+                "error-container": "#ffdad6",
+                "tertiary-container": "#cf8400",
+                "tertiary-fixed-dim": "#ffb95f",
+                "on-tertiary": "#ffffff",
+                "primary-fixed": "#d8e2ff",
+                "tertiary": "#855300",
+                "on-surface-variant": "#3e4a3f",
+                "inverse-surface": "#2e3131",
+                "primary-container": "#5493ff",
+                "secondary-fixed-dim": "#63dac1",
+                "surface-container-low": "#f2f4f3",
+                "on-secondary-container": "#007261",
+                "outline-variant": "#bdcabb",
+                "on-error": "#ffffff",
+                "secondary-container": "#81f7dd",
+                "background": "#f8faf9",
+                "on-surface": "#191c1c",
+                "secondary": "#006b5b",
+                "on-primary-container": "#002c63",
+                "on-secondary": "#ffffff",
+                "surface-container-high": "#e6e9e8",
+                "surface": "#f8faf9",
+                "error": "#ba1a1a",
+                "on-primary-fixed-variant": "#004493",
+                "on-error-container": "#93000a",
+                "inverse-primary": "#adc7ff",
+                "on-tertiary-container": "#422700",
+                "on-secondary-fixed-variant": "#005144",
+                "surface-bright": "#f8faf9",
+                "secondary-fixed": "#81f7dd",
+                "on-tertiary-fixed": "#2a1700",
+                "on-background": "#191c1c",
+                "outline": "#6e7a6e",
+                "surface-container": "#eceeed",
+                "surface-variant": "#e1e3e2"
+              },
+              fontFamily: {
+                "headline": ["Manrope"],
+                "body": ["Manrope"],
+                "label": ["Manrope"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-brand-gradient {
+            background: linear-gradient(135deg, #35a95d 0%, #2cae97 100%);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased selection:bg-primary/20">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl no-line tonal-shift bg-emerald-50/50 dark:bg-emerald-950/20">
+<div class="flex items-center justify-between px-6 h-16 w-full max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<img alt="FPT Software Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uggjghM-iGw21d2vyY6UJxTr_m-6iP8WX6QMSDGPPekag3RQcHsOjXXOM0wnJxVEzmP7RYYPyTmqQc1S8z3W7sFn3naeW34hXIvrocYto0VrxZDOMNdMvhz45cMCZ0QSv7uklP3TjmCY-xtdFotp_Pk97aSEqF7U_UfA6i6demeJk-EuJv2VouklOcSWG4iKdkph8iSwyyZElqxxP0eAYguH1kZkQ_CAJwQ4vnv1hK2yVE77A35B38W7R-mLx-tCGr7bFFN7iDS"/>
+<h1 class="text-lg font-extrabold text-on-surface tracking-tight">Đặt lịch gội đầu</h1>
+</div>
+</div>
+</header>
+<main class="pt-16 max-w-md mx-auto px-4 min-h-screen pb-6">
+<!-- Date & Title Section -->
+<section class="mt-4 mb-4">
+<div class="flex flex-col gap-3 px-2">
+<h3 class="text-title-md font-bold text-on-surface">Chọn ngày</h3>
+<!-- Date Selector -->
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1"><button class="flex-shrink-0 px-4 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-sm">Hôm nay</button>
+<button class="flex-shrink-0 px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-sm font-medium">Ngày mai, 22/10</button></div>
+</div>
+</section>
+<!-- Time Slot Grid -->
+<section class="mb-6">
+<!-- Morning Slots -->
+<div class="mb-2 px-2 flex items-center justify-between">
+<span class="text-label-sm font-bold text-outline uppercase tracking-widest">Chọn khung giờ</span>
+<span class="text-[9px] text-outline font-medium">20 PHÚT / CA</span>
+</div>
+<div class="grid grid-cols-3 gap-2 mb-6"><!-- 08:30 Selected -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all ring-2 ring-primary">
+<span class="font-bold text-base text-on-surface">08:30</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 08:50 Disabled -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-high/50 rounded-xl opacity-60 cursor-not-allowed" disabled="">
+<span class="font-bold text-base text-outline">08:50</span>
+<span class="text-[10px] font-medium text-outline">Hết</span>
+</button>
+<!-- 09:10 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">09:10</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 09:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">09:30</span>
+<span class="text-[10px] font-medium text-primary">1 chỗ</span>
+</button>
+<!-- 09:50 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">09:50</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 10:10 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">10:10</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 10:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">10:30</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 10:50 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">10:50</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 11:10 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">11:10</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 11:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">11:30</span>
+<span class="text-[10px] font-medium text-primary">1 chỗ</span>
+</button>
+<!-- 11:50 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">11:50</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button></div>
+<!-- Afternoon Slots -->
+<div class="grid grid-cols-3 gap-2"><!-- 13:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">13:30</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 13:50 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-high/50 rounded-xl opacity-60 cursor-not-allowed" disabled="">
+<span class="font-bold text-base text-outline">13:50</span>
+<span class="text-[10px] font-medium text-outline">Hết</span>
+</button>
+<!-- 14:10 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">14:10</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 14:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">14:30</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 14:50 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">14:50</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 15:10 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">15:10</span>
+<span class="text-[10px] font-medium text-primary">1 chỗ</span>
+</button>
+<!-- 15:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">15:30</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 15:50 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">15:50</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 16:10 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">16:10</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 16:30 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">16:30</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button>
+<!-- 16:40 -->
+<button class="flex flex-col items-center justify-center py-2.5 bg-surface-container-lowest rounded-xl shadow-sm border border-transparent active:scale-95 transition-all">
+<span class="font-bold text-base text-on-surface">16:40</span>
+<span class="text-[10px] font-medium text-primary">2 chỗ</span>
+</button></div>
+</section>
+<!-- Integrated Booking Form -->
+<section class="mt-8 mb-6 px-2">
+<form class="space-y-4">
+<div class="space-y-1.5">
+<label class="text-label-md font-bold text-on-surface px-1">Số điện thoại <span class="text-error">*</span></label>
+<input class="w-full h-14 bg-surface-container-low border-2 border-transparent rounded-2xl px-5 text-on-surface focus:border-primary/20 focus:ring-0 placeholder:text-outline/50 transition-all" placeholder="090 123 4567" required="" type="tel"/>
+</div>
+<div class="pt-2">
+<button class="w-full h-16 bg-primary text-white text-lg font-extrabold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all" type="submit">
+                    Đặt lịch
+                </button>
+<p class="text-center text-[10px] text-outline mt-4 uppercase tracking-widest font-bold opacity-60">Hotline: 0986280967</p>
+</div>
+</form>
+</section>
+</main>
+<!-- Booking Modal (Hidden State Template) -->
+<div class="fixed inset-0 z-[100] flex items-end justify-center px-4 pb-10 pointer-events-none hidden" id="booking-modal">
+<div class="absolute inset-0 bg-on-surface/40 backdrop-blur-sm"></div>
+<div class="relative w-full max-w-md bg-surface rounded-[2.5rem] p-8 shadow-2xl translate-y-0 transition-transform duration-500">
+<div class="w-12 h-1.5 bg-surface-container-highest rounded-full mx-auto mb-8"></div>
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-2xl font-extrabold tracking-tight">Nhập thông tin đặt lịch</h3>
+<button class="w-10 h-10 bg-surface-container-low rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface" data-icon="close">close</span>
+</button>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-4 p-4 bg-primary/5 rounded-2xl mb-2">
+<span class="material-symbols-outlined text-primary" data-icon="schedule">schedule</span>
+<div>
+<p class="text-xs text-primary font-bold uppercase tracking-wider">Khung giờ chọn</p>
+<p class="text-lg font-bold">Hôm nay, 08:30 sáng</p>
+</div>
+</div>
+<div class="space-y-4">
+<div class="space-y-2">
+<label class="text-label-md font-bold text-outline-variant px-1">Số điện thoại</label>
+<input class="w-full h-14 bg-surface-container-low border-none rounded-2xl px-5 text-on-surface focus:ring-2 focus:ring-primary/40" placeholder="090 123 4567" type="tel"/>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full h-16 bg-[#1a73e8] text-white text-lg font-extrabold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                    Xác nhận đặt lịch
+                </button>
+<p class="text-center text-xs text-outline mt-4">Bằng việc đặt lịch, bạn đồng ý với các điều khoản dịch vụ.</p>
+</div>
+</div>
+</div>
+</div>
+</body></html>
