@@ -4,11 +4,11 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <title>Đặt Lịch Gội Đầu tại khu dịch vụ FPT Software Hoà Lạc</title>
-<link rel="icon" type="image/png" href="path/to/favicon.png">
-<link rel="apple-touch-icon" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://yourdomain.com/"> <meta property="og:title" content="Đặt Lịch Gội Đầu tại khu dịch vụ FPT Software Hoà Lạc">
+<meta property="og:url" content="https://hongminhbka.github.io/fpt-software-booking-salon/"> <meta property="og:title" content="Đặt Lịch Gội Đầu tại khu dịch vụ FPT Software Hoà Lạc">
 <meta property="og:description" content="Đặt Lịch Gội Đầu tại khu dịch vụ FPT Software Hoà Lạc">
 <meta property="og:image" content="/preview.png"> <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -119,8 +119,9 @@
 <div class="flex flex-col gap-3 px-2">
 <h3 class="text-title-md font-bold text-on-surface">Chọn ngày</h3>
 <!-- Date Selector -->
-<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1"><button class="flex-shrink-0 px-4 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-sm">Hôm nay</button>
-<button class="flex-shrink-0 px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-sm font-medium">Ngày mai, 22/10</button></div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1" id="date-selector">
+    <button id="btn-today" class="date-btn flex-shrink-0 px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-sm font-medium transition-all"></button>
+    <button id="btn-tomorrow" class="date-btn flex-shrink-0 px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-sm font-medium transition-all"></button>
 </div>
 </section>
 <!-- Time Slot Grid -->
@@ -194,7 +195,69 @@
 </body>
 <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaUCyT9DyKk5JUtXcHfd2-RxihwlljM47XEqNQ-ftF34cEhlgx2GI8IUPlxUIyJHBJYQ/exec";
+let currentSelectedDate = "";
 
+function formatDateString(date) {
+    const d = String(date.getDate()).padStart(2, '0');
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const y = date.getFullYear();
+    return `${d}/${m}/${y}`;
+}
+
+function formatDisplayDate(date) {
+    const d = String(date.getDate()).padStart(2, '0');
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    return `${d}/${m}`;
+}
+
+// Tính toán lấy mốc thời gian Hôm nay và Ngày mai
+const todayDate = new Date();
+const tomorrowDate = new Date();
+tomorrowDate.setDate(tomorrowDate.getDate() + 1); // Cộng thêm 1 ngày
+
+const todayStr = formatDateString(todayDate);       // Kết quả: VD "30/03/2026"
+const tomorrowStr = formatDateString(tomorrowDate); // Kết quả: VD "31/03/2026"
+
+// Khởi tạo giao diện khi trang web load xong
+document.addEventListener("DOMContentLoaded", () => {
+    const btnToday = document.getElementById("btn-today");
+    const btnTomorrow = document.getElementById("btn-tomorrow");
+
+    // 1. Điền text hiển thị lên nút
+    btnToday.innerText = `Hôm nay, ${formatDisplayDate(todayDate)}`;
+    btnTomorrow.innerText = `Ngày mai, ${formatDisplayDate(tomorrowDate)}`;
+
+    // 2. Gắn sự kiện click cho 2 nút
+    btnToday.onclick = () => selectDay(todayStr, btnToday);
+    btnTomorrow.onclick = () => selectDay(tomorrowStr, btnTomorrow);
+
+    // 3. Mặc định kích hoạt nút "Hôm nay" khi mới vào web
+    selectDay(todayStr, btnToday); 
+});
+
+// Hàm xử lý khi bấm vào nút ngày
+function selectDay(dateStr, clickedButton) {
+    currentSelectedDate = dateStr;
+
+    // Đổi màu tất cả các nút về trạng thái xám (chưa chọn)
+    const allButtons = document.querySelectorAll('.date-btn');
+    allButtons.forEach(btn => {
+        btn.className = "date-btn flex-shrink-0 px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-sm font-medium transition-all";
+    });
+    
+    // Đổi màu nút vừa được click thành xanh (đã chọn)
+    clickedButton.className = "date-btn flex-shrink-0 px-4 py-2 bg-primary text-white rounded-full text-sm font-bold shadow-sm transition-all";
+
+    // Hiển thị trạng thái "Đang tải" trong lúc chờ mạng
+    const morningGrid = document.getElementById('morning-grid');
+    const afternoonGrid = document.getElementById('afternoon-grid');
+    if(morningGrid) morningGrid.innerHTML = "<p class='col-span-3 text-center text-[10px] text-outline'>Đang tải...</p>";
+    if(afternoonGrid) afternoonGrid.innerHTML = "<p class='col-span-3 text-center text-[10px] text-outline'>Đang tải...</p>";
+
+    // Gọi API lấy dữ liệu khung giờ của ngày được chọn
+    fetchAndRenderSlots(dateStr);
+}
+        
 async function fetchAndRenderSlots(day = "Hôm nay") {
     try {
         const response = await fetch(`${SCRIPT_URL}?day=${encodeURIComponent(day)}`);
@@ -235,7 +298,6 @@ async function fetchAndRenderSlots(day = "Hôm nay") {
         console.error("Lỗi:", error);
     }
 }
-// Chạy khởi tạo
-fetchAndRenderSlots();
+
 </script>
 </html>
