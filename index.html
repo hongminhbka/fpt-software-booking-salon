@@ -144,15 +144,15 @@
 </section>
 <!-- Integrated Booking Form -->
 <section class="mt-8 mb-6 px-2">
-<form class="space-y-4">
+<form id="booking-form" class="space-y-4">
 <div class="space-y-1.5">
 <label class="text-label-md font-bold text-on-surface px-1">Số điện thoại <span class="text-error">*</span></label>
-<input class="w-full h-14 bg-surface-container-low border-2 border-transparent rounded-2xl px-5 text-on-surface focus:border-primary/20 focus:ring-0 placeholder:text-outline/50 transition-all" placeholder="090 123 4567" required="" type="tel"/>
+<input type="tel" required class="w-full h-14 bg-surface-container-low border-2 border-transparent rounded-2xl px-5 text-on-surface focus:border-primary/20 focus:ring-0 placeholder:text-outline/50 transition-all" placeholder="090 123 4567" required="" type="tel"/>
 </div>
 <div class="pt-2">
-<button class="w-full h-16 bg-primary text-white text-lg font-extrabold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all" type="submit">
+<button type="submit" class="w-full h-16 bg-primary text-white text-lg font-extrabold rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-all" type="submit">
                     Đặt lịch
-                </button>
+</button>
 <p class="text-center text-[10px] text-outline mt-4 uppercase tracking-widest font-bold opacity-60">Hotline: 0986280967</p>
 </div>
 </form>
@@ -194,8 +194,9 @@
 </div>
 </body>
 <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzaUCyT9DyKk5JUtXcHfd2-RxihwlljM47XEqNQ-ftF34cEhlgx2GI8IUPlxUIyJHBJYQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw5kuaGGVgR-sxFc4bbVgwUFjE5kgzGMw5PBz3XkynlehsIs_fx6Y0luDOmh8CmCH2xvQ/exec";
 let currentSelectedDate = "";
+let selectedTimeSlot = ""; // Lưu khung giờ như "08:30"
 
 function formatDateString(date) {
     const d = String(date.getDate()).padStart(2, '0');
@@ -286,7 +287,15 @@ async function fetchAndRenderSlots(day = "Hôm nay") {
                 </span>
             `;
             
-            btn.onclick = () => alert("Bạn chọn: " + slot.time);
+            btn.onclick = () => {
+            // Xóa màu tất cả các nút giờ khác
+            document.querySelectorAll('#morning-grid button, #afternoon-grid button').forEach(b => {
+                b.classList.remove('ring-2', 'ring-primary');
+            });
+            // Thêm viền xanh cho nút vừa chọn
+            btn.classList.add('ring-2', 'ring-primary');
+                selectedTimeSlot = slot.time;
+            };
             return btn;
         };
 
@@ -298,6 +307,64 @@ async function fetchAndRenderSlots(day = "Hôm nay") {
         console.error("Lỗi:", error);
     }
 }
+async function handleBooking(event) {
+    event.preventDefault(); // Chặn việc load lại trang
+
+    const phoneInput = document.querySelector('input[type="tel"]');
+    const phone = phoneInput.value.trim();
+
+    // 1. Kiểm tra Số điện thoại (Bắt buộc)
+    if (!phone) {
+        alert("Vui lòng nhập số điện thoại để nhà trường liên lạc!");
+        phoneInput.focus();
+        return;
+    }
+
+    // 2. Kiểm tra Khung giờ (Không bắt buộc nhưng có cảnh báo)
+    if (!selectedTimeSlot) {
+        const confirmEmpty = confirm("Bạn chưa chọn khung giờ gội đầu. Bạn vẫn muốn tiếp tục đặt lịch chứ?");
+        if (!confirmEmpty) return;
+    }
+
+    // 3. Tiến hành gửi dữ liệu
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Đang xử lý...";
+
+    const payload = {
+        date: currentSelectedDate,
+        slot: selectedTimeSlot || "Chưa chọn",
+        phone: phone
+    };
+
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Dùng no-cors cho Google Apps Script
+            cache: 'no-cache',
+            body: JSON.stringify(payload)
+        });
+
+        // Với no-cors, ta không đọc được response trả về, 
+        // nhưng nếu không nhảy vào catch là đã gửi thành công
+        alert("Hệ thống ghi nhận lịch hẹn, bạn vui lòng sắp xếp thời gian xuống salon vào trước khung giờ khoảng 5 phút. Xin cảm ơn!");
+        
+        // Reset form
+        phoneInput.value = "";
+        selectedTimeSlot = "";
+        fetchAndRenderSlots(currentSelectedDate); // Load lại số chỗ trống
+
+    } catch (error) {
+        alert("Có lỗi xảy ra, vui lòng thử lại sau!");
+        console.error(error);
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "Đặt lịch";
+    }
+}
+
+// Gán hàm vào Form
+document.querySelector('form').onsubmit = handleBooking;
 
 </script>
 </html>
